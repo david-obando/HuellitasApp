@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_transform">
+
+    <fragment
+        android:id="@+id/nav_transform"
+        android:name="com.huellitas.huellitasapp.ui.transform.TransformFragment"
+        android:label="@string/menu_transform"
+        tools:layout="@layout/fragment_transform" />
+
+    <fragment
+        android:id="@+id/nav_reflow"
+        android:name="com.huellitas.huellitasapp.ui.reflow.ReflowFragment"
+        android:label="@string/menu_reflow"
+        tools:layout="@layout/fragment_reflow" >
+        <action
+            android:id="@+id/action_nav_reflow_to_addMascotaFragment"
+            app:destination="@id/addMascotaFragment" />
+        <action
+            android:id="@+id/action_nav_reflow_to_editMascotaFragment"
+            app:destination="@id/editMascotaFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_slideshow"
+        android:name="com.huellitas.huellitasapp.ui.slideshow.SlideshowFragment"
+        android:label="@string/menu_slideshow"
+        tools:layout="@layout/fragment_slideshow" />
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.huellitas.huellitasapp.ui.settings.SettingsFragment"
+        android:label="@string/menu_settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/addMascotaFragment"
+        android:name="com.huellitas.huellitasapp.ui.mascotas.AddMascotaFragment"
+        android:label="AddMascotaFragment" />
+    <fragment
+        android:id="@+id/editMascotaFragment"
+        android:name="com.huellitas.huellitasapp.ui.mascotas.EditMascotaFragment"
+        android:label="fragment_edit_mascota"
+        tools:layout="@layout/fragment_edit_mascota" />
+</navigation>
