@@ -61,4 +61,5 @@ dependencies {
     implementation("io.coil-kt:coil:2.6.0")//imagenes del recyclerview
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0") //el motor de serialización funcione
     implementation("com.google.android.gms:play-services-maps:18.2.0") //gps mapa
+    implementation("com.google.android.gms:play-services-location:21.3.0") // gps ubicacion
 }

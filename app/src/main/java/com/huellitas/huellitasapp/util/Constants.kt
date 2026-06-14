@@ -34,4 +34,39 @@ object Constants {
         "Mediano",
         "Grande"
     )
+
+    // --- NUEVOS CAMPOS PARA EL MÓDULO DE RESERVAS ---
+
+    // Strings exactos que se guardarán en el campo 'tipo_pago' de Supabase
+    const val PAGO_EFECTIVO = "efectivo"
+    const val PAGO_YAPE = "yape"
+    const val PAGO_PLIN = "plin"
+
+    // Textos visibles para el Spinner de Duración
+    val opcionesTiempoTexto = arrayOf(
+        "30 minutos",
+        "1 hora",
+        "1 hora 30 minutos",
+        "2 horas",
+        "2 horas 30 minutos",
+        "3 horas (Máximo)"
+    )
+
+    /**
+     * Devuelve los minutos reales basados en la posición seleccionada del Spinner.
+     * Si eligen "Tiempo Libre" (posición 6), devolvemos 0 minutos como bandera.
+     */
+    fun obtenerMinutosPorPosicion(posicion: Int): Int {
+        return when (posicion) {
+            0 -> 30
+            1 -> 60
+            2 -> 90
+            3 -> 120
+            4 -> 150
+            5 -> 180
+            6 -> 0 // 0 significa tiempo libre en nuestra lógica de negocio
+            else -> 60
+        }
+    }
+
 }
