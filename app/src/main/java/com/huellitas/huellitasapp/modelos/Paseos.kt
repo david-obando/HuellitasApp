@@ -8,6 +8,8 @@ data class Paseos(
     // lo autogenerará usando su secuencia o la función gen_random_uuid() al insertar.
     val id: String? = null,
 
+    // Agregamos la llave foránea que conecta con la tabla paseadores (puede ser nula si está pendiente)
+    val paseador_id: String? = null,
     val mascota_id: String,
     val distrito_paseo: String,
     val direccion_paseo: String,
@@ -20,5 +22,9 @@ data class Paseos(
     val notas: String? = null, // Nulo por defecto si el cliente no deja especificaciones
     val estado: String = "pendiente", // Estado inicial por defecto de la orden
     val fecha_paseo: String, // Fecha/Hora programada en formato "YYYY-MM-DD HH:mm:ss"
-    val created_at: String? = null // Se deja nulo porque Supabase se encarga de llenarlo solo
-)
+    val created_at: String? = null, // Se deja nulo porque Supabase se encarga de llenarlo solo
+
+    //Declaramos la relación anidada para capturar el JSON de Supabase
+    val paseadores: Paseador? = null
+
+) : java.io.Serializable // <- CAMBIO: Agregamos la herencia para poder enviarlo entre fragments

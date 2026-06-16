@@ -1,6 +1,5 @@
 package com.huellitas.huellitasapp.ui.slideshow
 
-
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.huellitas.huellitasapp.R
 import com.huellitas.huellitasapp.SupabaseConfig.supabase
 import com.huellitas.huellitasapp.adapter.PaseosAdapter
 import com.huellitas.huellitasapp.databinding.FragmentSlideshowBinding
@@ -89,12 +90,26 @@ class SlideshowFragment : Fragment() {
                         .sortedByDescending { it.fecha_paseo }
                 }
 
-                // 3. Ocultar el cargador y setear el adaptador con la data y el mapa de nombres
+                // 3. Ocultar el cargador y setear el adaptador con la data, el mapa y el CLICK
                 binding.progressBarHistorial.visibility = View.GONE
                 if (paseosBD.isEmpty()) {
                     binding.lblSinPaseos.visibility = View.VISIBLE
                 } else {
-                    binding.rvHistorialPaseos.adapter = PaseosAdapter(paseosBD, mapaMascotas)
+                    // CAMBIO CLAVE: Implementamos la lambda para capturar el click de la tarjeta
+                    binding.rvHistorialPaseos.adapter = PaseosAdapter(paseosBD, mapaMascotas) { paseoSeleccionado ->
+
+                        // Obtenemos el nombre de la mascota del mapa de mascotas
+                        val nombreMascota = mapaMascotas[paseoSeleccionado.mascota_id] ?: "Mascota"
+
+                        // Envolvemos el objeto del paseo y el nombre en un Bundle para pasarlo a la otra vista
+                        val bundle = Bundle().apply {
+                            putSerializable("PASEO_OBJETO", paseoSeleccionado)
+                            putString("NOMBRE_MASCOTA_PASADO", nombreMascota)
+                        }
+
+                        // Navegamos al fragmento de detalle usando la ruta de navegación del nav_graph
+                        findNavController().navigate(R.id.action_nav_slideshow_to_detallePaseoFragment, bundle)
+                    }
                 }
 
             } catch (e: Exception) {

@@ -28,7 +28,14 @@
         android:id="@+id/nav_slideshow"
         android:name="com.huellitas.huellitasapp.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_slideshow" >
+        <action
+            android:id="@+id/action_nav_slideshow_to_detallePaseoFragment"
+            app:destination="@id/detallePaseoFragment" />
+        <action
+            android:id="@+id/action_nav_slideshow_self"
+            app:destination="@id/nav_slideshow" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_settings"
@@ -44,4 +51,9 @@
         android:name="com.huellitas.huellitasapp.ui.mascotas.EditMascotaFragment"
         android:label="fragment_edit_mascota"
         tools:layout="@layout/fragment_edit_mascota" />
+    <fragment
+        android:id="@+id/detallePaseoFragment"
+        android:name="com.huellitas.huellitasapp.DetallePaseoFragment"
+        android:label="fragment_detalle_paseo"
+        tools:layout="@layout/fragment_detalle_paseo" />
 </navigation>
