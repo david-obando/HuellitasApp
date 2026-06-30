@@ -15,7 +15,7 @@ data class Paseador(
     val longitud_actual: Double? = null,
 
     // Esto es para poder traer el nombre y distrito desde la tabla 'usuarios'
-    val usuarios: Usuario? = null,
+    val usuarios: List<Usuario>? = null,
 
     val foto_url: String?
 )

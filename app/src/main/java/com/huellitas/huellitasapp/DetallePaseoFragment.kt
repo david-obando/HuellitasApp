@@ -1,15 +1,21 @@
 package com.huellitas.huellitasapp
 
+import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.huellitas.huellitasapp.databinding.FragmentDetallePaseoBinding
 import com.huellitas.huellitasapp.modelos.Paseos
+import java.net.URLEncoder
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -65,6 +71,62 @@ class DetallePaseoFragment : Fragment(R.layout.fragment_detalle_paseo) {
             binding.txtDetalleEstado.setBackgroundColor(Color.parseColor("#E65100"))
         } else {
             binding.cardPaseador.visibility = View.VISIBLE
+
+            // Extraemos de forma segura el primer elemento de las listas anidadas
+            val paseador = paseo.paseadores?.firstOrNull()
+            val usuarioPaseador = paseador?.usuarios?.firstOrNull()
+
+            // Asignamos la información recuperada de las relaciones a los TextViews correspondientes
+            binding.txtPaseadorNombre.text = usuarioPaseador?.nombre ?: "Paseador Asignado"
+            binding.txtPaseadorCelular.text = "📞 Celular: ${usuarioPaseador?.celular ?: "-"}"
+            binding.rbPaseadorCalificacion.rating = (paseador?.calificacion_promedio ?: 0.0).toFloat()
+
+            // Cargar Foto del paseador de manera asíncrona con Coil
+            val fotoUrl = paseador?.foto_url
+            if (!fotoUrl.isNullOrEmpty()) {
+                binding.imgPaseadorFoto.load(fotoUrl) {
+                    crossfade(true)
+                    placeholder(android.R.drawable.ic_menu_gallery)
+                    error(android.R.drawable.ic_menu_report_image)
+                    transformations(CircleCropTransformation()) // Aplica el recorte circular estético
+                }
+            } else {
+                binding.imgPaseadorFoto.setImageResource(android.R.drawable.ic_menu_gallery)
+            }
+
+            // Lógica del botón para abrir el chat directo en WhatsApp
+            binding.btnContactarWhatsApp.setOnClickListener {
+                val celular = usuarioPaseador?.celular
+                if (!celular.isNullOrEmpty()) {
+                    abrirWhatsApp(celular, nombreMascota)
+                } else {
+                    Toast.makeText(context, "El paseador no cuenta con un número de celular válido", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun abrirWhatsApp(celular: String, nombreMascota: String) {
+        // Limpiamos la cadena quitando espacios vacíos o guiones intermedios
+        var numeroLimpio = celular.replace(" ", "").replace("-", "")
+
+        // Verificamos y anteponemos de forma automática el prefijo telefónico de Perú (51)
+        if (!numeroLimpio.startsWith("51") && !numeroLimpio.startsWith("+51")) {
+            numeroLimpio = "51$numeroLimpio"
+        }
+        if (numeroLimpio.startsWith("+")) {
+            numeroLimpio = numeroLimpio.replace("+", "")
+        }
+
+        // Mensaje predeterminado codificado para evitar problemas con espacios en la URL
+        val mensaje = "Hola, te contacto desde HuellitasApp respecto al paseo de $nombreMascota. ¡Muchas gracias!"
+
+        try {
+            val url = "https://wa.me/$numeroLimpio?text=${URLEncoder.encode(mensaje, "UTF-8")}"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(intent)
+        } catch (e: Exception) {
+            Toast.makeText(context, "No se pudo abrir WhatsApp o la aplicación no está instalada", Toast.LENGTH_SHORT).show()
         }
     }
 

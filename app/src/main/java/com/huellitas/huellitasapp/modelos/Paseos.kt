@@ -24,7 +24,8 @@ data class Paseos(
     val fecha_paseo: String, // Fecha/Hora programada en formato "YYYY-MM-DD HH:mm:ss"
     val created_at: String? = null, // Se deja nulo porque Supabase se encarga de llenarlo solo
 
-    //Declaramos la relación anidada para capturar el JSON de Supabase
-    val paseadores: Paseador? = null
+    // Declaramos la relación anidada para capturar el JSON de Supabase.
+    // MODIFICACIÓN: Se cambia a List para soportar el formato de respuesta [] de PostgREST.
+    val paseadores: List<Paseador>? = null
 
 ) : java.io.Serializable // <- CAMBIO: Agregamos la herencia para poder enviarlo entre fragments
